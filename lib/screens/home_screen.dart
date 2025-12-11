@@ -4,6 +4,9 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'fish_farm_screen.dart';
+import 'attendence_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -489,7 +492,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     icon: Icons.water,
                     color: Colors.blue,
                     delay: 0,
-                    onTap: () => _navigateToPage('Fish Farm'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                        return FishFarmScreen();
+                      }));
+                    }
                   ),
                   _ModernMenuButton(
                     title: "KP Public Water Bodies",
@@ -527,12 +534,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     delay: 400,
                     onTap: () => _navigateToPage('Feeding Schedule'),
                   ),
+                  // New Attendance button
                   _ModernMenuButton(
-                    title: "Support",
-                    icon: Icons.support_agent,
-                    color: Colors.red,
+                    title: "Attendance",
+                    icon: Icons.how_to_reg,
+                    color: const Color(0xFF196339),
                     delay: 500,
-                    onTap: () => _navigateToPage('Contact'),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const AttendenceScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
+                            const curve = Curves.easeInOutCubic;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(position: animation.drive(tween), child: child);
+                          },
+                          transitionDuration: const Duration(milliseconds: 400),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
